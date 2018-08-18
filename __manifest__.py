@@ -8,6 +8,7 @@
         # 'security/ir.model.access.csv',
         'views/crm_phonecall.xml',
         'views/website_support_ticket_views.xml',
+        'web_asterisk_click2dial.xml',
     ],
     'demo': [],
     'depends': ['website_support', 'crm_phone', 'asterisk_click2dial'],
