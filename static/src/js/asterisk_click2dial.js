@@ -16,7 +16,7 @@ asterisk_click2dial.click2dialOpenCaller.include({
     on_open_caller: function (event) {
         event.stopPropagation();
         var self = this;
-        
+
         var resource_id = null;
         
         self.rpc('/asterisk_click2dial/get_record_from_my_channel', {}).done(function(r) {
@@ -73,8 +73,7 @@ asterisk_click2dial.click2dialOpenCaller.include({
                 resource_id = r[1];
             }
         });
-
-        self.rpc('/asterisk_click2dial/get_my_channel', {}).done(function(r) {
+        self.rpc('/doyarushka_click2dial/get_my_channel', {}).done(function(r) {
 
         });
    }
