@@ -3,16 +3,26 @@
     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).   */
 
 odoo.define('doyarushka_click2dial.click2dial', function (require) {
-"use strict";
+    "use strict";
 
+var SystrayMenu = require('web.SystrayMenu');
 var web_client = require('web.web_client');
 var Widget = require('web.Widget');
 var core = require('web.core');
 var _t = core._t;
 
-var asterisk_click2dial = require('asterisk_click2dial.click2dial');
+var click2dial = {};
 
-asterisk_click2dial.click2dialOpenCaller.include({
+var my_click2dialOpenCaller = Widget.extend({
+    template: 'asterisk_click2dial.OpenCaller',
+    events: {
+        'click': 'on_open_caller',
+    },
+
+    start: function () {
+        this._super();
+    },
+
     on_open_caller: function (event) {
         event.stopPropagation();
         var self = this;
@@ -76,8 +86,16 @@ asterisk_click2dial.click2dialOpenCaller.include({
         self.rpc('/doyarushka_click2dial/get_my_channel', {}).done(function(r) {
 
         });
-   }
+   },
 });
+
+var openCallerIndex = SystrayMenu.Items.IndexOf(click2dialOpenCaller);
+if (openCallerIndex !== -1) {
+    SystrayMenu.Items[openCallerIndex] = my_click2dialOpenCaller;
+}
+else{
+    SystrayMenu.Items.push(my_click2dialOpenCaller);
+}
 
 
 });

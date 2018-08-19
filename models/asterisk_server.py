@@ -67,3 +67,7 @@ class AsteriskServer(models.Model):
 
         _logger.debug("Fetching channel: '%s'", my_channel)
         return my_channel
+
+    def _get_my_channel_true(self):
+        _logger.debug("Found a matching Event in 'Up' state")
+        return True

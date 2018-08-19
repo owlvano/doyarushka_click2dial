@@ -10,7 +10,7 @@
           inherit_id="web.assets_backend">
     <xpath expr="." position="inside">
         <script type="text/javascript"
-            src="/doyarushka_click2dial/static/src/js/asterisk_click2dial.js"></script>
+            src="/doyarushka_click2dial/static/src/js/doyarushka_click2dial.js"></script>
     </xpath>
 </template>
 
