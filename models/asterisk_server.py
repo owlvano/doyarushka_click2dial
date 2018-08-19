@@ -39,7 +39,7 @@ class AsteriskServer(models.Model):
         return False
 
     @api.model
-    def _get_my_channel(self):
+    def get_my_channel(self):
         user, ast_server, ast_manager = self._connect_to_asterisk()
         my_channel = False
         try:
@@ -68,6 +68,7 @@ class AsteriskServer(models.Model):
         _logger.debug("Fetching channel: '%s'", my_channel)
         return my_channel
 
-    def _get_my_channel_true(self):
-        _logger.debug("Found a matching Event in 'Up' state")
+    @api.model
+    def get_my_channel_true(self):
+        _logger.debug("Successfully returned true value for the controller call")
         return True
