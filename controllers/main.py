@@ -12,8 +12,8 @@ class DoyarushkaClick2dialController(http.Controller):
     def create_phonecall_from_my_channel(self, **kw):
         
         # Check if the current user has rights to execute the method
-        user = http.request.env.context.get('uid')
-        if not user.context_auto_creation_crm_call:
+        has_rights = http.request.env['res.users'].get_current_user_context_auto_creation_crm_call()
+        if not has_rights:
         	return -1
         
     	my_channel = http.request.env['asterisk.server'].get_my_channel()

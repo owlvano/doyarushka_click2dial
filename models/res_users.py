@@ -10,3 +10,6 @@ class ResUsers(models.Model):
     context_auto_creation_crm_call = fields.Boolean(
 	    string='Automatically create a call in CRM after a click2dial',
 	    default=True)
+
+    def get_current_user_context_auto_creation_crm_call(self):
+    	return self.env.user.context_auto_creation_crm_call
