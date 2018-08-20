@@ -4,6 +4,7 @@
 
 from odoo import models, fields, api, _
 from odoo.addons.base_phone.fields import Phone
+from pprint import pformat
 from datetime import datetime
 import logging
 _logger = logging.getLogger(__name__)
@@ -31,11 +32,16 @@ class CrmPhonecall(models.Model):
 
     def create_phonecall_by_channel(self, chan):
     	new_partner_id = None
+        _logger.debug("Creating a phonecall by channel: ")
+        _logger.debug(pformat(chan))
+        phone_number = chan.get('CallerIDNum')
+    	record = self.env['phone.common'].get_record_from_phone_number(phone_number)
 
-    	partner_record = self.env['phone.common'].get_record_from_phone_number(
-                chan.get('CallerIDNum'))
-    	if partner_record[0] == 'res.partner':
-    		new_partner_id = partner_record[1]
+        if record == False:
+            _logger.debug("WARNING: No matching record with phonenumber '%s' was found", phone_number)
+    	elif record[0] == 'res.partner':
+            _logger.debug("SUCCESS: res.partner record with phonenumber '%s' was found", phone_number)
+            new_partner_id = record[1]
 
     	values = {
     		'date': datetime.now(), 
@@ -43,8 +49,13 @@ class CrmPhonecall(models.Model):
     		'partner_id': new_partner_id,
     		'direction': self.determine_channel_direction(chan),
     		'bridge_id': chan.get('BridgeID')}
-    	self.create(values)
 
+    	new_phonecall_record = self.create(values)
+
+        _logger.debug("SUCCESS: New record of the model 'crm.phonecall' with name '%s' was created", new_phonecall_record.name)
+        return new_phonecall_record
+
+    # Very stupid determination mechanism based on Asterisk channel data output
     def determine_channel_direction(self, chan):
     	if chan.get('Data') == "Outgoing Line":
     		return 'outbound'

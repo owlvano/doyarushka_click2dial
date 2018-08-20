@@ -83,7 +83,6 @@ var my_click2dialOpenCaller = Widget.extend({
                 });
             }
         });
-        
 
    },
 });

@@ -67,3 +67,10 @@ class AsteriskServer(models.Model):
 
         _logger.debug("Fetching channel: '%s'", my_channel)
         return my_channel
+
+    def get_mock_channel(self):
+        return {
+            'CallerIDNum': 'Mock_2002',
+            'Data': 'Outgoing Line',
+            'BridgeID': 'Mock_BridgeID'
+        }
