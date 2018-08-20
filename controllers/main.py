@@ -11,8 +11,8 @@ class DoyarushkaClick2dialController(http.Controller):
         type='json', auth='public')
     def create_phonecall_from_my_channel(self, **kw):
         
-        # Check if the user has rights to execute the method
-        user = self.env.user
+        # Check if the current user has rights to execute the method
+        user = http.request.env.user
         if not user.context_auto_creation_crm_call:
         	return -1
         
