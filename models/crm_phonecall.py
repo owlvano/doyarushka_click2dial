@@ -16,21 +16,23 @@ class CrmPhonecall(models.Model):
     
     support_ticket_id = fields.Many2one('website.support.ticket', "Ticket ID")
     voice_record_filename = fields.Char(string="Voice Record File Name")
-    bridge_id = fields.Char(string="Unique Call Bridge ID")
+    bridge_id = fields.Char(string="Unique Call Bridge ID", default=None)
 
     @api.model
     def create(self, values):
     	record = super(CrmPhonecall, self).create(values)
 
-    	record.date = values['date'];
-    	record.name = values['name'];
-    	record.partner_id = values['partner_id'];
-    	record.direction = values['direction'];
-    	record.bridge_id = values['bridge_id'];
-        record.user_id = values['user_id'];
-        record.state = values['state'];
+    	record.date = values['date']
+    	record.name = values['name']
+    	record.partner_id = values['partner_id']
+    	record.direction = values['direction']    	
+        record.user_id = values['user_id']
+        record.state = values['state']
 
     	return record
+
+    def set_bridge_id(self, bridge_id):
+        self.bridge_id = bridge_id
 
     def create_phonecall_by_channel(self, user, chan):
         # check if record with this channel's bridge already exists
@@ -56,11 +58,11 @@ class CrmPhonecall(models.Model):
     		'name': "Template name", 
     		'partner_id': new_partner_id,
     		'direction': self.determine_channel_direction(user, chan),
-    		'bridge_id': new_bridge_id,
             'user_id': user,
             'state': 'done'}
 
     	new_phonecall_record = self.create(values)
+        new_phonecall_record.set_bridge_id(new_bridge_id)
 
         _logger.debug("SUCCESS: New record of the model 'crm.phonecall' with name '%s' was created", new_phonecall_record.name)
         return new_phonecall_record

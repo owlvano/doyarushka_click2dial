@@ -25,6 +25,6 @@ class WebsiteSupportTicket(models.Model):
 
     def link_call_to_ticket(self):
         recordset_empty_tickets = self.env['crm.phonecall'].filtered(lambda r: r.support_ticket_id == False)
-        record_unlinked_ticket = empty_tickets_recordset.search(['&', ('partner_id', '=', self.partner_id), ('user_id', '=', self.user_id)], order = "date desc", limit=1)
+        record_unlinked_ticket = recordset_empty_tickets.search(['&', ('partner_id', '=', self.partner_id.id), ('user_id', '=', self.user_id.id)], order = "date desc", limit=1)
         if record_unlinked_ticket:
             record_unlinked_ticket.support_ticket_id = self
