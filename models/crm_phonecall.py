@@ -27,10 +27,18 @@ class CrmPhonecall(models.Model):
     	record.partner_id = values['partner_id'];
     	record.direction = values['direction'];
     	record.bridge_id = values['bridge_id'];
+        record.user_id = values['user_id'];
+        record.state = values['state'];
 
     	return record
 
-    def create_phonecall_by_channel(self, chan):
+    def create_phonecall_by_channel(self, user, chan):
+        # check if record with this channel's bridge already exists
+        new_bridge_id = chan.get('BridgeID')
+        if self.search_count(['bridge_id', '=', new_bridge_id]) > 0:
+            _logger.debug("FAILURE: Record with BridgeID '%s' already exists", new_bridge_id)
+            return False
+
     	new_partner_id = None
         _logger.debug("Creating a phonecall by channel: ")
         _logger.debug(pformat(chan))
@@ -47,8 +55,10 @@ class CrmPhonecall(models.Model):
     		'date': datetime.now(), 
     		'name': "Template name", 
     		'partner_id': new_partner_id,
-    		'direction': self.determine_channel_direction(chan),
-    		'bridge_id': chan.get('BridgeID')}
+    		'direction': self.determine_channel_direction(user, chan),
+    		'bridge_id': new_bridge_id,
+            'user_id': user,
+            'state': 'done'}
 
     	new_phonecall_record = self.create(values)
 
@@ -56,7 +66,7 @@ class CrmPhonecall(models.Model):
         return new_phonecall_record
 
     # Very stupid determination mechanism based on Asterisk channel data output
-    def determine_channel_direction(self, chan):
+    def determine_channel_direction(self, user, chan):
     	if chan.get('Data') == "Outgoing Line":
     		return 'outbound'
     	else:

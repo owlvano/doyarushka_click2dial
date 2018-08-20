@@ -28,9 +28,9 @@ class DoyarushkaClick2dialController(http.Controller):
     		return False
     	
 
-    	new_phonecall = http.request.env['crm.phonecall'].create_phonecall_by_channel(my_channel)
+    	new_phonecall = http.request.env['crm.phonecall'].create_phonecall_by_channel(current_user, my_channel)
     	if not new_phonecall:
-            _logger.debug("FAILURE: Record already exists")
+            # Record already exists
             return -2
 
     	
