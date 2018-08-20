@@ -26,8 +26,6 @@ var my_click2dialOpenCaller = Widget.extend({
     on_open_caller: function (event) {
         event.stopPropagation();
         var self = this;
-
-        var resource_id = null;
         
         self.rpc('/asterisk_click2dial/get_record_from_my_channel', {}).done(function(r) {
         // console.log('RESULT RPC r='+r);
@@ -80,13 +78,13 @@ var my_click2dialOpenCaller = Widget.extend({
                     context: {},
                 };
                 web_client.action_manager.do_action(action);
-                resource_id = r[1];
+                self.rpc('/doyarushka_click2dial/create_phonecall_from_my_channel', {}).done(function(r) {
+
+                });
             }
         });
         
-        self.rpc('/doyarushka_click2dial/get_my_channel', {}).done(function(r) {
 
-        });
    },
 });
 

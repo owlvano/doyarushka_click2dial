@@ -67,8 +67,3 @@ class AsteriskServer(models.Model):
 
         _logger.debug("Fetching channel: '%s'", my_channel)
         return my_channel
-
-    @api.model
-    def get_my_channel_true(self):
-        _logger.debug("Successfully returned true value for the controller call")
-        return True
