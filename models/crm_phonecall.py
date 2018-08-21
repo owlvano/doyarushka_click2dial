@@ -26,7 +26,7 @@ class CrmPhonecall(models.Model):
     	record.name = values['name']
     	record.partner_id = values['partner_id']
     	record.direction = values['direction']    	
-        record.user_id = values['user_id']
+        record.user_id = values['responsible_id']
         record.state = values['state']
 
     	return record
@@ -58,7 +58,7 @@ class CrmPhonecall(models.Model):
     		'name': "Template name", 
     		'partner_id': new_partner_id,
     		'direction': self.determine_channel_direction(chan),
-            'user_id': user,
+            'responsible_id': user,
             'state': 'done'}
 
     	new_phonecall_record = self.create(values)
