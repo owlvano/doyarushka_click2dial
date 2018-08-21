@@ -25,14 +25,16 @@ class CrmPhonecall(models.Model):
     	record.date = values['date']
     	record.name = values['name']
     	record.partner_id = values['partner_id']
-    	record.direction = values['direction']    	
-        record.user_id = values['responsible_id']
-        record.state = values['state']
-
+    	record.direction = values['direction']
+        record.state = values['state']    	
+        
     	return record
 
     def set_bridge_id(self, bridge_id):
         self.bridge_id = bridge_id
+
+    def set_responsible_user(self, user_id):
+        self.user_id = user_id
 
     def create_phonecall_by_channel(self, user, chan):
         # check if record with this channel's bridge already exists
@@ -58,11 +60,11 @@ class CrmPhonecall(models.Model):
     		'name': "Template name", 
     		'partner_id': new_partner_id,
     		'direction': self.determine_channel_direction(chan),
-            'responsible_id': user,
             'state': 'done'}
 
     	new_phonecall_record = self.create(values)
         new_phonecall_record.set_bridge_id(new_bridge_id)
+        new_phonecall_record.set_responsible_user(user)
 
         _logger.debug("SUCCESS: New record of the model 'crm.phonecall' with name '%s' was created", new_phonecall_record.name)
         return new_phonecall_record
