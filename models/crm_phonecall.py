@@ -48,9 +48,9 @@ class CrmPhonecall(models.Model):
     	record = self.env['phone.common'].get_record_from_phone_number(partner_phone_number)
 
         if record == False:
-            _logger.debug("WARNING: No matching record with phonenumber '%s' was found", phone_number)
+            _logger.debug("WARNING: No matching record with phonenumber '%s' was found", partner_phone_number)
     	elif record[0] == 'res.partner':
-            _logger.debug("SUCCESS: res.partner record with phonenumber '%s' was found", phone_number)
+            _logger.debug("SUCCESS: res.partner record with phonenumber '%s' was found", partner_phone_number)
             new_partner_id = record[1]
 
     	values = {
