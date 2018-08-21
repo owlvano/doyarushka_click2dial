@@ -64,7 +64,7 @@ class CrmPhonecall(models.Model):
 
     	new_phonecall_record = self.create(values)
         new_phonecall_record.set_bridge_id(new_bridge_id)
-        new_phonecall_record.set_responsible_user(user.id)
+        new_phonecall_record.set_responsible_user(user)
 
         _logger.debug("SUCCESS: New record of the model 'crm.phonecall' with name '%s' was created", new_phonecall_record.name)
         return new_phonecall_record
