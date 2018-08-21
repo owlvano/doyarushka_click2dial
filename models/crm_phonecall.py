@@ -44,8 +44,8 @@ class CrmPhonecall(models.Model):
     	new_partner_id = None
         _logger.debug("Creating a phonecall by channel: ")
         _logger.debug(pformat(chan))
-        phone_number = chan.get('CallerIDNum')
-    	record = self.env['phone.common'].get_record_from_phone_number(phone_number)
+        partner_phone_number = chan.get('ConnectedLineNum')
+    	record = self.env['phone.common'].get_record_from_phone_number(partner_phone_number)
 
         if record == False:
             _logger.debug("WARNING: No matching record with phonenumber '%s' was found", phone_number)
