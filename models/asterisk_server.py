@@ -23,19 +23,19 @@ class AsteriskServer(models.Model):
         # 6 = Up
         if (
                 chan.get('ChannelState') in ('4', '6') and (
-                    chan.get('ConnectedLineNum') == internal_number or
-                    chan.get('EffectiveConnectedLineNum') == internal_number or
-                    sip_account in chan.get('BridgedChannel', ''))):
+                    chan.get('CallerIDNum') == internal_number 
+                    # or sip_account in chan.get('BridgedChannel', '')
+                    )):
             _logger.debug(
                 "Found a matching Event with channelstate = %s",
                 chan.get('ChannelState'))
             return True
         # Compatibility with Asterisk 1.4
-        if (
-                chan.get('State') == 'Up' and
-                sip_account in chan.get('Link', '')):
-            _logger.debug("Found a matching Event in 'Up' state")
-            return True
+        # if (
+        #         chan.get('State') == 'Up' and
+        #         sip_account in chan.get('Link', '')):
+        #     _logger.debug("Found a matching Event in 'Up' state")
+        #     return True
         return False
 
     @api.model

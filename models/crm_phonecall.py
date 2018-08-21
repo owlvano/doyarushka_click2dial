@@ -57,7 +57,7 @@ class CrmPhonecall(models.Model):
     		'date': datetime.now(), 
     		'name': "Template name", 
     		'partner_id': new_partner_id,
-    		'direction': self.determine_channel_direction(user, chan),
+    		'direction': self.determine_channel_direction(chan),
             'user_id': user,
             'state': 'done'}
 
@@ -68,8 +68,8 @@ class CrmPhonecall(models.Model):
         return new_phonecall_record
 
     # Very stupid determination mechanism based on Asterisk channel data output
-    def determine_channel_direction(self, user, chan):
-    	if chan.get('Data') == "Outgoing Line":
+    def determine_channel_direction(self, chan):
+    	if chan.get('LinkedID') == chan.get('UniqueID'):
     		return 'outbound'
     	else:
     		return 'inbound'
