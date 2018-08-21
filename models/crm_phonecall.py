@@ -37,7 +37,7 @@ class CrmPhonecall(models.Model):
     def create_phonecall_by_channel(self, user, chan):
         # check if record with this channel's bridge already exists
         new_bridge_id = chan.get('BridgeID')
-        if self.search_count(['bridge_id', '=', new_bridge_id]) > 0:
+        if self.search_count([('bridge_id', '=', new_bridge_id)]) > 0:
             _logger.debug("FAILURE: Record with BridgeID '%s' already exists", new_bridge_id)
             return False
 
