@@ -56,9 +56,9 @@ class CrmPhonecall(models.Model):
     	values = {
     		'date': datetime.now(), 
     		'name': "Template name", 
-    		'partner_id': new_partner_id.id,
+    		'partner_id': new_partner_id,
     		'direction': self.determine_channel_direction(chan),
-            'user_id': user.id,
+            'user_id': user,
             'state': 'done'}
 
     	new_phonecall_record = self.create(values)
