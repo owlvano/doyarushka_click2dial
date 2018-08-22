@@ -17,6 +17,8 @@ class CrmPhonecall(models.Model):
     support_ticket_id = fields.Many2one('website.support.ticket', "Ticket ID")
     voice_record_filename = fields.Char(string="Voice Record File Name")
     bridge_id = fields.Char(string="Unique Call Bridge ID", default=None)
+    unique_id = fields.Char(string="Unique Channel ID", default=None)
+    linked_id = fields.Char(string="Unique Linked Channel ID", default=None)
 
     @api.model
     def create(self, values):
@@ -29,13 +31,15 @@ class CrmPhonecall(models.Model):
         record.state = values['state']    	
         
     	return record
-
-    def set_bridge_id(self, bridge_id):
-        self.bridge_id = bridge_id
-
+    
     def set_responsible_user(self, user_id):
-        self.user_id = user_id
+        self.user_id = user_id    
 
+    def set_channel_data(self, chan):
+        self.bridge_id = chan.get('BridgeID')
+        self.unique_id = chan.get('UniqueID')
+        self.linked_id = chan.get('LinkedID')
+        
     def create_phonecall_by_channel(self, user, chan):
         # check if record with this channel's bridge already exists
         new_bridge_id = chan.get('BridgeID')
@@ -55,23 +59,23 @@ class CrmPhonecall(models.Model):
             _logger.debug("SUCCESS: res.partner record with phonenumber '%s' was found", partner_phone_number)
             new_partner_id = record[1]
 
-    	values = {
+    	create_values = {
     		'date': datetime.now(), 
     		'name': "Template name", 
     		'partner_id': new_partner_id,
-    		'direction': self.determine_channel_direction(chan),
+    		'direction': self.determine_channel_direction(),
             'state': 'done'}
 
-    	new_phonecall_record = self.create(values)
-        new_phonecall_record.set_bridge_id(new_bridge_id)
+    	new_phonecall_record = self.create(create_values)        
         new_phonecall_record.set_responsible_user(user)
+        new_phonecall_record.set_channel_data(chan)
 
         _logger.debug("SUCCESS: New record of the model 'crm.phonecall' with name '%s' was created", new_phonecall_record.name)
         return new_phonecall_record
 
     # Very stupid determination mechanism based on Asterisk channel data output
-    def determine_channel_direction(self, chan):
-    	if chan.get('LinkedID') == chan.get('UniqueID'):
+    def determine_channel_direction(self):
+    	if self.linked_id == self.unique_id:
     		return 'outbound'
     	else:
     		return 'inbound'
