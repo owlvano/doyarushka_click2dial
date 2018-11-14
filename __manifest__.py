@@ -6,12 +6,16 @@
     'license':'LGPL-3',
     'data': [
         # 'security/ir.model.access.csv',
+
         'views/crm_phonecall.xml',
         'views/website_support_ticket_views.xml',
         'views/res_users_views.xml',
         'web_asterisk_click2dial.xml',
     ],
     'demo': [],
-    'depends': ['website_support', 'crm_phone', 'asterisk_click2dial'],
+    'depends': ['support_ticket', 
+                'crm_phone', 
+                'asterisk_click2dial'
+                ],
     'installable': True,
 }
